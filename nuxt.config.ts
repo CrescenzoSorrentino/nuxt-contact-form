@@ -13,5 +13,6 @@ export default defineNuxtConfig({
     contactFromEmail: '',
     upstashRedisRestUrl: '',
     upstashRedisRestToken: '',
+    contactSendConfirmation: false,
   },
 })

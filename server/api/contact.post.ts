@@ -135,5 +135,26 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Optional confirmation email to the visitor (off by default).
+  // It is a "nice to have": if it fails we only log it, we do NOT fail the
+  // request, because the main email to you already succeeded.
+  if (config.contactSendConfirmation) {
+    const { error: confirmationError } = await resend.emails.send({
+      from: config.contactFromEmail,
+      to: body.email,
+      subject: "We received your message",
+      html: `
+        <h2>Thanks for reaching out!</h2>
+        <p>Hi ${escapeHtml(body.name)}, we received your message and will get back to you soon.</p>
+        <p><strong>Your message:</strong></p>
+        <p>${escapeHtml(body.message)}</p>
+      `,
+    });
+
+    if (confirmationError) {
+      console.error("Confirmation email failed:", confirmationError);
+    }
+  }
+
   return { ok: true };
 });

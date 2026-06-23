@@ -19,6 +19,8 @@ rate limiting, and transactional email via [Resend](https://resend.com).
   **fail-open** strategy (a Redis outage will not break your form).
 - **HTML-escaped email body** to prevent injection.
 - **`reply-to`** set to the visitor, so you can reply with one click.
+- **Optional confirmation email** to the visitor (off by default,
+  enable with `NUXT_CONTACT_SEND_CONFIRMATION=true`).
 - **Accessible** — linked labels, `aria-required`, `aria-describedby`,
   `role="status"`/`role="alert"` messages, required-field markers.
 - **Themeable with CSS variables** — no external CSS framework, easy to
@@ -69,6 +71,7 @@ published npm package).
        contactFromEmail: "",
        upstashRedisRestUrl: "",
        upstashRedisRestToken: "",
+       contactSendConfirmation: false,
      },
    });
    ```
@@ -95,9 +98,15 @@ prefix lets Nuxt map them onto `runtimeConfig` automatically.
 | `NUXT_CONTACT_FROM_EMAIL`       | Sender address (e.g. `onboarding@resend.dev` for tests). |
 | `NUXT_UPSTASH_REDIS_REST_URL`   | Upstash Redis REST URL.                                  |
 | `NUXT_UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST token.                                |
+| `NUXT_CONTACT_SEND_CONFIRMATION`| Set to `true` to also email a confirmation to the visitor (default: off). |
 
 > **Rate limiting is optional and fails open.** If the Upstash variables are
 > missing or unreachable, submissions still go through — the form keeps working.
+
+> **Confirmation email is optional and off by default.** When enabled, a
+> confirmation is sent to the visitor's address. It requires a verified sender
+> domain in Resend, and a failure to send it never fails the submission (the
+> message to you has already been delivered).
 
 ## Theming
 
